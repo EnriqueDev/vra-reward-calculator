@@ -1,26 +1,31 @@
 import * as React from 'react'
-import { CssBaseline, Switch } from '@mui/material'
-import { AppBar } from 'components'
-import { data } from './fixtures/api'
-import { baseTransformer } from 'utils/transformers/baseTransformer'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { QueryClient, QueryClientProvider } from 'react-query'
+import { CssBaseline } from '@mui/material'
+import { AppBar } from 'components'
 import Auth from 'modules/Auth/Auth'
 import { TokenContextProvider } from 'context/token'
+import Data from 'modules/Data/Data'
+
+const queryClient = new QueryClient()
 
 const App: React.FC = () => {
-  const transactions = React.useMemo(() => baseTransformer(data), [])
-
   return (
     <React.StrictMode>
-      <TokenContextProvider>
-        <CssBaseline />
-        <AppBar />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Auth />} />
-          </Routes>
-        </BrowserRouter>
-      </TokenContextProvider>
+      <QueryClientProvider client={queryClient}>
+        <TokenContextProvider>
+          <CssBaseline />
+          <AppBar />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/">
+                <Route path="rewards" element={<Data />} />
+                <Route index element={<Auth />} />
+              </Route>
+            </Routes>
+          </BrowserRouter>
+        </TokenContextProvider>
+      </QueryClientProvider>
     </React.StrictMode>
   )
 }

@@ -1,9 +1,13 @@
 import { Button, Container, TextField, Typography } from '@mui/material'
 import { Box } from '@mui/system'
+import { useTokenContext } from 'context/token/TokenContext'
 import React, { FormEvent } from 'react'
+import { useNavigate } from 'react-router'
 
 const Auth = () => {
   const [token, setToken] = React.useState<string | undefined>(undefined)
+  const { updateToken } = useTokenContext()
+  const navigate = useNavigate()
   return (
     <Container component="main" maxWidth="xs">
       <Box
@@ -17,12 +21,7 @@ const Auth = () => {
         <Typography component="h1" variant="h5">
           Verawallet token
         </Typography>
-        <Box
-          component="form"
-          onSubmit={(e: FormEvent) => e.preventDefault()}
-          noValidate
-          sx={{ mt: 1 }}
-        >
+        <Box component="div" sx={{ mt: 1 }}>
           <TextField
             margin="normal"
             required
@@ -37,6 +36,12 @@ const Auth = () => {
             type="submit"
             fullWidth
             variant="contained"
+            onClick={() => {
+              if (token) {
+                updateToken(token)
+                navigate('/rewards', { replace: true })
+              }
+            }}
             sx={{ mt: 3, mb: 2 }}
           >
             Sign In
